@@ -4,15 +4,17 @@ import Results from "../components/Results";
 
 const TopPage = ({countriesJson, setCountry, getCountryData, countryData}) => {
     return (
-        <div>
-            <Title />
-            <Selector
-                countriesJson={countriesJson}
-                setCountry={setCountry}
-                getCountryData={getCountryData}
-                countryData={countryData}
-            />
-            <Results countryData={countryData}/>
+        <div className="top-page-container">
+            <div>
+                <Title />
+                <Selector
+                    countriesJson={countriesJson}
+                    setCountry={setCountry}
+                    getCountryData={getCountryData}
+                    countryData={countryData}
+                />
+                <Results countryData={countryData}/>
+            </div>
         </div>
     );
 };
