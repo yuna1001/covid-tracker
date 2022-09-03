@@ -1,7 +1,9 @@
-import { useState } from "react";
-import './App.css';
+import { useState, useEffect } from "react";
+import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import TopPage from './pages/TopPage';
+import WorldPage from "./pages/WorldPage";
 import countriesJson from "./countries.json";
+import './App.css';
 
 function App() {
   const [country, setCountry] = useState("");
@@ -12,9 +14,10 @@ function App() {
     newRecovered: "",
     totalRecovered: "",
   });
+  const [allCountriesData, setAllCountriesData] = useState([]);
 
   const getCountryData = () => {
-      fetch(`https://api.covid19api.com/country/${country}`)
+    fetch(`https://api.covid19api.com/country/${country}`)
       .then(res => res.json())
       .then(data => {
         setCountryData({
@@ -27,15 +30,31 @@ function App() {
       });
   };
 
+  useEffect(() => {
+    fetch("https://reactbook-corona-tracker-api.herokuapp.com/summary")
+      .then(res => res.json())
+      .then(data => setAllCountriesData(data.Countries))
+  }, []);
+
   return (
-    <div className="App">
-      <TopPage
-        countriesJson={countriesJson}
-        setCountry={setCountry}
-        getCountryData={getCountryData}
-        countryData={countryData}
-      />
-    </div>
+    <Router>
+      <Routes>
+        <Route exact path="/" element={
+          <TopPage
+            countriesJson={countriesJson}
+            setCountry={setCountry}
+            getCountryData={getCountryData}
+            countryData={countryData}
+          />
+        }/>
+
+        <Route exact path="/world" element={
+          <WorldPage
+            allCountriesData={allCountriesData}
+          />
+        }/>
+      </Routes>
+    </Router>
   );
 }
 
