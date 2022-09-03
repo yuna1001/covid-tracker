@@ -7,7 +7,7 @@ import './App.css';
 
 function App() {
   const [loading, setLoading] = useState(false);
-  const [country, setCountry] = useState("");
+  const [country, setCountry] = useState('japan');
   const [countryData, setCountryData] = useState({
     date: "",
     newConfirmed: "",
@@ -17,24 +17,28 @@ function App() {
   });
   const [allCountriesData, setAllCountriesData] = useState([]);
 
-  const getCountryData = () => {
-    setLoading(true);
+  useEffect(() => {
+    const getCountryData = () => {
+      setLoading(true);
 
-    fetch(`https://api.covid19api.com/country/${country}`)
-      .then(res => res.json())
-      .then(data => {
-        setCountryData({
-          date: data[data.length -1].Date,
-          newConfirmed: data[data.length -1].Confirmed - data[data.length -2].Confirmed,
-          totalConfirmed: data[data.length -1].Confirmed,
-          newRecovered: data[data.length -1].Recovered - data[data.length -2].Recovered,
-          totalRecovered: data[data.length -1].Recovered,
-        });
+      fetch(`https://api.covid19api.com/country/${country}`)
+        .then(res => res.json())
+        .then(data => {
+          setCountryData({
+            date: data[data.length -1].Date,
+            newConfirmed: data[data.length -1].Confirmed - data[data.length -2].Confirmed,
+            totalConfirmed: data[data.length -1].Confirmed,
+            newRecovered: data[data.length -1].Recovered - data[data.length -2].Recovered,
+            totalRecovered: data[data.length -1].Recovered,
+          });
 
-        setLoading(false);
-      })
-      .catch(err => alert('エラーが発生しました。'));
-  };
+          setLoading(false);
+        })
+        .catch(err => alert('エラーが発生しました。'));
+    }
+
+    getCountryData();
+  }, [country]);
 
   useEffect(() => {
     fetch("https://reactbook-corona-tracker-api.herokuapp.com/summary")
@@ -50,7 +54,6 @@ function App() {
           <TopPage
             countriesJson={countriesJson}
             setCountry={setCountry}
-            getCountryData={getCountryData}
             countryData={countryData}
             loading={loading}
           />
