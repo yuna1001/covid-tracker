@@ -1,11 +1,13 @@
 const Card = ({allCountriesData}) => {
     return (
-        <div>
+        <div className="card-container">
             {allCountriesData.map((countryData, index) => 
-                <div key={index}>
-                    <h2>{countryData.Country}</h2>
-                    <p>新規感染者: {countryData.NewConfirmed.toLocaleString()}</p>
-                    <p>感染者総数: {countryData.TotalConfirmed.toLocaleString()}</p>
+                <div key={index} className="card">
+                    <div>
+                        <h2>{countryData.Country}</h2>
+                        <p>新規感染者: <span>{countryData.NewConfirmed.toLocaleString()}</span></p>
+                        <p>感染者総数: <span>{countryData.TotalConfirmed.toLocaleString()}</span></p>
+                    </div>
                 </div>
             )}
         </div>
